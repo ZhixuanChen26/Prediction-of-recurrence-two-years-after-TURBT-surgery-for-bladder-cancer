@@ -8,6 +8,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.metrics import roc_auc_score, average_precision_score, f1_score, confusion_matrix, brier_score_loss, roc_curve
 import warnings
+import joblib
 warnings.filterwarnings('ignore')
 
 
@@ -445,9 +446,12 @@ def main():
     print(f"F1 Score: {results['f1_mean']:.4f} ({results['f1_ci'][0]:.4f}, {results['f1_ci'][1]:.4f})")
     print(f"最终模型OOB Score: {summary['final_model_oob_score']:.4f}")
     print(f"最佳Fold: {results['best_fold_info']['best_fold']}")
+
+    joblib.dump(final_model, 'rf_final_model.pkl')
+    joblib.dump(results['threshold_mean'], 'rf_threshold.pkl')
+    joblib.dump(results['feature_cols'], 'rf_feature_cols.pkl')  
     
     return results, final_model
-
 
 if __name__ == "__main__":
     results, final_model = main()
